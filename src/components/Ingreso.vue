@@ -15,7 +15,7 @@
                       class="input-group-text"
                       for="validationCustom01"
                       id="inputGroup-sizing-default"
-                      >Salario Actual</span
+                      >Salario Mensual</span
                     >
                   </div>
                   <input
@@ -168,6 +168,9 @@
                   Guardar Presupuesto
                 </button>
               </div>
+              <div class="col-12">
+                <small id="notes" class="form-text text-danger">* Nota: El presupuesto se calcula de forma quincenal usando tu salario mensual.</small>
+              </div>
             </div>
           </div>
         </div>
@@ -186,7 +189,7 @@ export default {
   methods: {
     calcular(value) {
       if (this.salario < 0) this.salario *= -1;
-      return (this.salario * value) / 2 || 0;
+      return Math.round((this.salario * value) / 2 || 0);
     },
   },
   computed: {
