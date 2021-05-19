@@ -27,7 +27,7 @@
                     required
                     min="0"
                     max="999999999"
-                    v-model="salario"
+                    v-model.number="salario"
                     step="1"
                     maxlength="10"
                   />
@@ -164,12 +164,19 @@
                 </div>
               </div>
               <div class="col-12">
-                <button type="button" class="btn btn-primary btn-block">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-block"
+                  v-on:click="addIngreso"
+                >
                   Guardar Presupuesto
                 </button>
               </div>
               <div class="col-12">
-                <small id="notes" class="form-text text-danger">* Nota: El presupuesto se calcula de forma quincenal usando tu salario mensual.</small>
+                <small id="notes" class="form-text text-danger"
+                  >* Nota: El presupuesto se calcula de forma quincenal usando
+                  tu salario mensual.</small
+                >
               </div>
             </div>
           </div>
@@ -179,17 +186,34 @@
   </div>
 </template>
 <script>
+import Axios from "axios";
+import axios from "axios";
 export default {
   name: "Presupuesto",
   data() {
     return {
       salario: 1000,
+      salarios: [],
     };
   },
   methods: {
     calcular(value) {
       if (this.salario < 0) this.salario *= -1;
       return Math.round((this.salario * value) / 2 || 0);
+    },
+    addIngreso() {
+      const Ingreso = {
+        Salario: Number.parseFloat(this.salario.toString()),
+        Fecha: new Date().toDateString(),
+        Esatus: false,
+      };
+      Axios.post("https://inversof-c4bcf.firebaseio.com/Ingresos.json", Ingreso)
+        .then((res) => {
+          console.log(res.data.name);
+        })
+        .catch((er) => {
+          console.error(er);
+        });
     },
   },
   computed: {
@@ -208,6 +232,19 @@ export default {
     obtenerLibre() {
       return this.calcular(0.1);
     },
+  },
+  mounted() {
+    axios
+      .get("https://inversof-c4bcf.firebaseio.com/Ingresos.json")
+      .then((res) => {
+        for (const id in res.data) {
+          this.salarios.push(res.data[id].Salario);
+          console.log(this.salarios);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
 };
 </script>

@@ -9,7 +9,7 @@ import Ingreso from './components/Ingreso.vue';
 export default {
   name: 'App',
   components: {
-    'app-ingreso': Ingreso
+    'app-ingreso': Ingreso,
   }
 }
 </script>
