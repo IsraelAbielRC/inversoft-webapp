@@ -40,12 +40,6 @@ export default {
       Detalles: [],
     };
   },
-  computed: {
-    formatDate(date) {
-      console.log(date);
-      return 
-    },
-  },
   mounted() {
     Axios.get("https://inversof-c4bcf.firebaseio.com/Ingresos.json")
       .then((res) => {
