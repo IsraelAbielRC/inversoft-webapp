@@ -187,7 +187,6 @@
 </template>
 <script>
 import Axios from "axios";
-import axios from "axios";
 export default {
   name: "Presupuesto",
   data() {
@@ -202,14 +201,25 @@ export default {
       return Math.round((this.salario * value) / 2 || 0);
     },
     addIngreso() {
+      const currentDateWithFormat = new Date();
       const Ingreso = {
         Salario: Number.parseFloat(this.salario.toString()),
-        Fecha: new Date().toDateString(),
-        Esatus: false,
+        Fecha: currentDateWithFormat
+          .toJSON()
+          .slice(0, 10)
+          .replace(/-/g, "/"),
+        Estatus: false,
       };
       Axios.post("https://inversof-c4bcf.firebaseio.com/Ingresos.json", Ingreso)
         .then((res) => {
           console.log(res.data.name);
+          this.$swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Se Guardo Salario",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
         .catch((er) => {
           console.error(er);
@@ -232,19 +242,6 @@ export default {
     obtenerLibre() {
       return this.calcular(0.1);
     },
-  },
-  mounted() {
-    axios
-      .get("https://inversof-c4bcf.firebaseio.com/Ingresos.json")
-      .then((res) => {
-        for (const id in res.data) {
-          this.salarios.push(res.data[id].Salario);
-          console.log(this.salarios);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   },
 };
 </script>
