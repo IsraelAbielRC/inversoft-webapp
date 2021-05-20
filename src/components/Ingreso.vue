@@ -27,7 +27,7 @@
                     required
                     min="0"
                     max="999999999"
-                    v-model.number="salario"
+                    v-model="salario"
                     step="1"
                     maxlength="10"
                   />
@@ -165,11 +165,20 @@
               </div>
               <div class="col-12">
                 <button
+                v-if="index == -1"
                   type="button"
                   class="btn btn-primary btn-block"
                   v-on:click="addIngreso"
                 >
                   Guardar Presupuesto
+                </button>
+                <button
+                  v-else
+                  type="button"
+                  class="btn btn-primary btn-block"
+                  v-on:click="updateIngresos"
+                >
+                  Actualizar Presupuesto
                 </button>
               </div>
               <div class="col-12">
@@ -206,6 +215,10 @@
                   Fecha Registro
                   <span class="badge badge-secondary">{{ detalle.Fecha }}</span>
                 </h6>
+                <i
+                  class="fas fa-check-circle text-primary cursor"
+                  v-on:click="cargarIngreso(i)"
+                ></i>
               </li>
             </ul>
           </div>
@@ -222,6 +235,7 @@ export default {
     return {
       salario: 1000,
       Detalles: [],
+      index: -1,
     };
   },
   methods: {
@@ -242,6 +256,7 @@ export default {
       Axios.post("https://inversof-c4bcf.firebaseio.com/Ingresos.json", Ingreso)
         .then((res) => {
           console.log(res.data.name);
+          this.resetData();
           this.$swal.fire({
             position: "center",
             icon: "success",
@@ -260,8 +275,9 @@ export default {
           this.Detalles = [];
           for (const id in res.data) {
             this.Detalles.push({
+              ID: id,
               Salario: res.data[id].Salario,
-              Fecha: res.data[id].Fecha.split("T")[0],
+              Fecha: res.data[id].Fecha,
               Estatus: res.data[id].Estatus,
             });
           }
@@ -269,9 +285,52 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-          this.getIngresos();
         });
     },
+    cargarIngreso(index) {
+      this.index = index;
+      this.salario = this.Detalles[index].Salario;
+      this.$swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Se Cargo Salario",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    updateIngresos() {
+      const Ingreso = {
+        Salario: Number.parseFloat(this.salario.toString()),
+        Fecha: this.Detalles[this.index].Fecha,
+        Estatus: this.Detalles[this.index].Estatus,
+      };
+      Axios.put(
+        "https://inversof-c4bcf.firebaseio.com/Ingresos/" +
+          this.Detalles[this.index].ID +
+          ".json",
+        Ingreso
+      )
+        .then((res) => {
+          this.getIngresos();
+          this.resetData();
+          this.$swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Se Actualizo Salario",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.getIngresos();
+          this.resetData();
+        });
+    },
+    resetData(){
+      this.index = -1;
+      this.salario = 0;
+    }
   },
   computed: {
     obtenerGastos() {
@@ -295,3 +354,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.cursor {
+  cursor: pointer;
+}
+</style>
