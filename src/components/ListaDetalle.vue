@@ -33,7 +33,6 @@
 </template>
 <script>
 import Axios from "axios";
-import moment from "moment";
 export default {
   name: "Detalles",
   data() {
