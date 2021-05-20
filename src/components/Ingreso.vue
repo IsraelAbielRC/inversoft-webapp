@@ -320,6 +320,7 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           });
+          console.log(res.status);
         })
         .catch((error) => {
           console.error(error);
