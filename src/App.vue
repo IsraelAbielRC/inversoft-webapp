@@ -1,18 +1,17 @@
 <template>
   <div id="app">
-    <app-ingreso/>
+    <page-usuarios />
   </div>
 </template>
 
 <script>
-import Ingreso from './components/Ingreso.vue';
+import Usuarios from "./Pages/Usuarios/Usuarios.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    'app-ingreso': Ingreso
-  }
-}
+    "page-usuarios": Usuarios,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>
