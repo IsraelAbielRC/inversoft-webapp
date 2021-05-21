@@ -1,16 +1,13 @@
 <template>
   <div id="app">
-    <page-usuarios />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Usuarios from "./Pages/Usuarios/Usuarios.vue";
 export default {
   name: "App",
-  components: {
-    "page-usuarios": Usuarios,
-  },
+  components: {},
 };
 </script>
 

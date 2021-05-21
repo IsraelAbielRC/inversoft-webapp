@@ -27,7 +27,6 @@ export default {
   },
   watch: {
     EstatusPadre: function() {
-      console.log(this.EstatusPadre);
     },
   },
 };
