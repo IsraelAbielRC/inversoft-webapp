@@ -247,6 +247,7 @@ export default {
       salario: 1000,
       Detalles: [],
       index: -1,
+      id: "",
     };
   },
   methods: {
@@ -255,6 +256,16 @@ export default {
       return Math.round((this.salario * value) / 2 || 0);
     },
     addIngreso() {
+      if (!this.idUsuario) {
+        this.$swal.fire({
+          position: "center",
+          icon: "error",
+          title: "No se Cuenta con una Cuenta",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
       const currentDateWithFormat = new Date();
       const Ingreso = {
         Salario: Number.parseFloat(this.salario.toString()),
@@ -262,7 +273,8 @@ export default {
           .toJSON()
           .slice(0, 10)
           .replace(/-/g, "/"),
-        Estatus: false,
+        Estatus: true,
+        idUsuario: this.id,
       };
       Axios.post("https://inversof-c4bcf.firebaseio.com/Ingresos.json", Ingreso)
         .then((res) => {
@@ -310,10 +322,21 @@ export default {
       });
     },
     updateIngresos() {
+      if (!this.idUsuario) {
+        this.$swal.fire({
+          position: "center",
+          icon: "error",
+          title: "No se Cuenta con una Cuenta",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
       const Ingreso = {
         Salario: Number.parseFloat(this.salario.toString()),
         Fecha: this.Detalles[this.index].Fecha,
         Estatus: this.Detalles[this.index].Estatus,
+        idUsuario: this.id,
       };
       Axios.put(
         "https://inversof-c4bcf.firebaseio.com/Ingresos/" +

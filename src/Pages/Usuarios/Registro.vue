@@ -58,14 +58,14 @@
             <div class="col-6">
               <button
                 type="button"
-                class="btn btn-secondary btn-block"
+                class="btn btn-ligth btn-block"
                 v-on:click="emitirData"
               >
                 <i class="far fa-window-close text-danger"></i>
               </button>
             </div>
             <div class="col-6">
-              <button type="button" class="btn btn-secondary btn-block">
+              <button type="button" class="btn btn-ligth btn-block">
                 <i class="far fa-save text-primary"></i>
               </button>
             </div>

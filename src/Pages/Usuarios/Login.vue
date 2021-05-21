@@ -63,7 +63,7 @@ export default {
           this.$emit("emitirDataEvent", false);
       },
       verificarCliente(){
-         this.$router.push("/Menu");
+         this.$router.push("/Grafica");
       }
   }
 };

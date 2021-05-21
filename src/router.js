@@ -15,8 +15,14 @@ const Presupuesto = (resolve) => {
     resolve(require("./Pages/Usuarios/Ingreso.vue"));
   });
 };
+const Portafolio = (resolve) => {
+  require.ensure(["./Pages/Usuarios/Portafolio.vue"], () => {
+    resolve(require("./Pages/Usuarios/Portafolio.vue"));
+  });
+};
 export const routes = [
   { path: "/Presupuesto", component: Presupuesto },
-  { path: "/Menu", component: menu },
+  { path: "/Grafica", component: menu },
   { path: "/", component: Inicio },
+  { path: "/Portafolio", component: Portafolio },
 ];
