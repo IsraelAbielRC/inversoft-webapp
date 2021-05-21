@@ -13,8 +13,8 @@
         >
       </li>
       <li class="nav-item">
-        <router-link class="nav-link" to="/Mamiferos" active-class="active"
-          >Mamiferos</router-link
+        <router-link class="nav-link" to="/Presupuesto" active-class="active"
+          >Presupuesto</router-link
         >
       </li>
       <li class="nav-item">

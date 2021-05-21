@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="col-12 mt-2">
-              <button type="button" class="btn btn-primary btn-block">
+              <button type="button" class="btn btn-primary btn-block" v-on:click="verificarCliente">
                   Ingresar Cuenta
               </button>
             </div>
@@ -61,6 +61,9 @@ export default {
   methods:{
       emitirData(){
           this.$emit("emitirDataEvent", false);
+      },
+      verificarCliente(){
+         this.$router.push("/Menu");
       }
   }
 };

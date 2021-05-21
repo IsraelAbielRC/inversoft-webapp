@@ -1,7 +1,6 @@
 <template>
   <div>
       <app-menu-bar/>
-      <router-view></router-view>
   </div>
 </template>
 <script>
