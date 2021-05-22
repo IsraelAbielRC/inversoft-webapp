@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "bcryptjs": "^2.4.3",
     "chart.js": "^3.2.1",
     "core-js": "^3.6.5",
     "vee-validate": "^3.4.5",
