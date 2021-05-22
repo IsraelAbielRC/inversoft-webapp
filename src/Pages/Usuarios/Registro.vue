@@ -153,11 +153,14 @@ export default {
         });
     },
     cifrarData(value) {
-      const salt = bcrypt.genSaltSync(10);
-      return bcrypt.hashSync(value, salt);
+      var hash = require('object-hash');
+      return hash.sha1(value);
     },
     verificarUsoName() {
       this.Existe = true;
+      if (!this.Nombre) {
+        this.Existe = false;
+      }
       Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
         .then((res) => {
           for (const id in res.data) {
@@ -170,8 +173,7 @@ export default {
         .catch((error) => {
           console.error(error);
         })
-        .finally(() => {
-        });
+        .finally(() => {});
     },
   },
   watch: {
