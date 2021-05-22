@@ -10,5 +10,10 @@ export default {
   components: {
     "app-menu-bar": MenuBar,
   },
+  mounted(){
+    if(!this.$route.params.id){
+      this.$router.push("/");
+    }
+  }
 };
 </script>

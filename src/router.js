@@ -21,8 +21,8 @@ const Portafolio = (resolve) => {
   });
 };
 export const routes = [
-  { path: "/Presupuesto", component: Presupuesto },
-  { path: "/Grafica", component: menu },
+  { path: "/Presupuesto/:id", component: Presupuesto },
+  { path: "/Grafica/:id", component: menu },
   { path: "/", component: Inicio },
-  { path: "/Portafolio", component: Portafolio },
+  { path: "/Portafolio/:id", component: Portafolio },
 ];

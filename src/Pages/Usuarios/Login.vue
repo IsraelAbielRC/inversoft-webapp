@@ -90,12 +90,13 @@ export default {
         this.$swal.fire({
           position: "center",
           icon: "error",
-          title: "verificar Información",
+          title: "Verificar Información",
           showConfirmButton: false,
           timer: 1500,
         });
         return;
       }
+      let idUser = "";
       this.Existe = false;
       Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
         .then((res) => {
@@ -103,6 +104,7 @@ export default {
             if (res.data[id].Nombre == this.Nombre.trim().toUpperCase()) {
               this.Existe =
                 res.data[id].Codigo == this.cifrarData(this.Password);
+              idUser = id;
               break;
             }
           }
@@ -112,12 +114,12 @@ export default {
         })
         .finally(() => {
           if (this.Existe) {
-            this.$router.push("/Grafica");
+            this.$router.push("/Grafica/" + idUser);
           } else {
             this.$swal.fire({
               position: "center",
               icon: "error",
-              title: "verificar Información",
+              title: "Verificar Información",
               showConfirmButton: false,
               timer: 1500,
             });
