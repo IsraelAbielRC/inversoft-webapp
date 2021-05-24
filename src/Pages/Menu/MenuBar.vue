@@ -1,46 +1,50 @@
 <template>
   <nav class="navbar navbar-dark bg-dark">
     <ul class="nav">
-      <li class="nav-item">
+      <li v-for="(ruta, index) in Rutas" :key="index" class="nav-item">
         <router-link
-          class="nav-link fas fa-power-off"
-          to="/"
-          active-class="active"
-          exact
-        >
-          Salir</router-link
-        >
-      </li>
-      <li class="nav-item">
-        <!--<a class="nav-link" href="/Aves">Aves</a>-->
-        <router-link
-          class="nav-link fas fa-signal"
-          to="/Grafica"
+          :class="ruta.Icon"
+          :to="ruta.Path"
           active-class="active"
         >
-          Grafica</router-link
-        >
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link fas fa-coins"
-          to="/Presupuesto"
-          active-class="active"
-          >Presupuesto</router-link
-        >
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-link far fa-calendar-alt"
-          to="/Portafolio"
-          active-class="active"
-        >
-          Portafolio</router-link
+          {{ruta.Name}}</router-link
         >
       </li>
     </ul>
   </nav>
 </template>
+<script>
+export default {
+  name: "Menu",
+  data() {
+    return {
+      Rutas: [],
+    };
+  },
+  mounted() {
+    this.Rutas.push({
+      Icon: "nav-link fas fa-power-off",
+      Path: "/",
+      Name: "Salir",
+    });
+    this.Rutas.push({
+      Icon: "nav-link fas fa-signal",
+      Path: "/Grafica/" + this.$route.params.id,
+      Name: "Grafica",
+    });
+    this.Rutas.push({
+      Icon: "nav-link fas fa-coins",
+      Path: "/Presupuesto/" + this.$route.params.id,
+      Name: "Presupuesto",
+    });
+    this.Rutas.push({
+      Icon: "nav-link far fa-calendar-alt",
+      Path: "/Portafolio/" + this.$route.params.id,
+      Name: "Portafolio",
+    });
+  },
+};
+</script>
 <style scoped>
 .active {
   color: aliceblue;

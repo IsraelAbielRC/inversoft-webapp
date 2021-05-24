@@ -31,7 +31,7 @@
                       required
                       min="0"
                       max="999999999"
-                      v-model="salario"
+                      v-model.number="salario"
                       step="1"
                       maxlength="10"
                     />
@@ -180,7 +180,7 @@
                     v-else
                     type="button"
                     class="btn btn-primary btn-block"
-                    v-on:click="updateIngresos"
+                    v-on:click="UpdateUsuario"
                   >
                     Actualizar Presupuesto
                   </button>
@@ -345,6 +345,24 @@ export default {
         })
         .catch((error) => {
           console.error(error);
+        });
+    },
+    UpdateUsuario() {
+      /*Actualizamos Presupuesto */
+      this.Detalles[this.index].Salario = this.salario;
+      console.log(this.Detalles);
+      /*Obtenemos el Usuario*/
+      let data = {};
+      Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
+        .then((res) => {
+          data = res.data[this.id];
+          data.Presupuesto = this.Detalles;
+          this.updateIngresos(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
           this.getIngresos();
           this.resetData();
         });
