@@ -256,7 +256,7 @@ export default {
       return Math.round((this.salario * value) / 2 || 0);
     },
     addIngreso() {
-      if (!this.idUsuario) {
+      if (!this.id) {
         this.$swal.fire({
           position: "center",
           icon: "error",
@@ -266,45 +266,40 @@ export default {
         });
         return;
       }
-      const currentDateWithFormat = new Date();
-      const Ingreso = {
+      const Presupuesto = {
         Salario: Number.parseFloat(this.salario.toString()),
-        Fecha: currentDateWithFormat
-          .toJSON()
-          .slice(0, 10)
-          .replace(/-/g, "/"),
-        Estatus: true,
-        idUsuario: this.id,
+        Fecha: new Intl.DateTimeFormat("es-MX", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }).format(new Date()),
+        Estatus: false,
       };
-      Axios.post("https://inversof-c4bcf.firebaseio.com/Ingresos.json", Ingreso)
+      /*Obtenemos el Usuario*/
+      let data = {};
+      Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
         .then((res) => {
-          console.log(res.data.name);
-          this.resetData();
-          this.$swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Se Guardo Salario",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          data = res.data[this.id];
+          if (data.Presupuesto == "") {
+            data.Presupuesto = [];
+          }
+          data.Presupuesto.push(Presupuesto);
+          this.updateIngresos(data);
         })
-        .catch((er) => {
-          console.error(er);
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          console.log(data);
         });
     },
     getIngresos() {
-      Axios.get("https://inversof-c4bcf.firebaseio.com/Ingresos.json")
+      Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
         .then((res) => {
           this.Detalles = [];
-          for (const id in res.data) {
-            this.Detalles.push({
-              ID: id,
-              Salario: res.data[id].Salario,
-              Fecha: res.data[id].Fecha,
-              Estatus: res.data[id].Estatus,
-            });
+          for (let i = 0; i < res.data[this.id].Presupuesto.length; i++) {
+            this.Detalles.push(res.data[this.id].Presupuesto[i]);
           }
-          this.getIngresos();
         })
         .catch((error) => {
           console.error(error);
@@ -321,8 +316,8 @@ export default {
         timer: 1500,
       });
     },
-    updateIngresos() {
-      if (!this.idUsuario) {
+    updateIngresos(Ingreso) {
+      if (!this.id) {
         this.$swal.fire({
           position: "center",
           icon: "error",
@@ -332,16 +327,8 @@ export default {
         });
         return;
       }
-      const Ingreso = {
-        Salario: Number.parseFloat(this.salario.toString()),
-        Fecha: this.Detalles[this.index].Fecha,
-        Estatus: this.Detalles[this.index].Estatus,
-        idUsuario: this.id,
-      };
       Axios.put(
-        "https://inversof-c4bcf.firebaseio.com/Ingresos/" +
-          this.Detalles[this.index].ID +
-          ".json",
+        "https://inversof-c4bcf.firebaseio.com/Usuarios/" + this.id + ".json",
         Ingreso
       )
         .then((res) => {
@@ -350,7 +337,7 @@ export default {
           this.$swal.fire({
             position: "center",
             icon: "success",
-            title: "Se Actualizo Salario",
+            title: "Se Actualizo Presupuesto",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -385,6 +372,8 @@ export default {
     },
   },
   mounted() {
+    this.id = this.$route.params.id;
+    console.log(this.id);
     this.getIngresos();
   },
 };
