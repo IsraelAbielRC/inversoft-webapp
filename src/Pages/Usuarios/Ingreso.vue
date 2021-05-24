@@ -206,8 +206,11 @@
                   :key="i"
                   class="list-group-item d-flex justify-content-between"
                 >
-                  <span class="text-success cursor">
-                    <i class="far fa-dot-circle"></i>
+                  <span  :class="cambiarClass(i)">
+                    <i
+                      class="far fa-dot-circle"
+                      v-on:click="cambiarEstusIngreso(i)"
+                    ></i>
                   </span>
                   <h6>
                     Salario Mensual $
@@ -350,7 +353,6 @@ export default {
     UpdateUsuario() {
       /*Actualizamos Presupuesto */
       this.Detalles[this.index].Salario = this.salario;
-      console.log(this.Detalles);
       /*Obtenemos el Usuario*/
       let data = {};
       Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
@@ -366,6 +368,34 @@ export default {
           this.getIngresos();
           this.resetData();
         });
+    },
+    cambiarEstusIngreso(index) {
+      this.index = index;
+      for (let i = 0; i < this.Detalles.length; i++) {
+        if (this.index == i) {
+          this.Detalles[i].Estatus = !this.Detalles[i].Estatus;
+        } else {
+          this.Detalles[i].Estatus = false;
+        }
+      }
+      /*Obtenemos el Usuario*/
+      let data = {};
+      Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
+        .then((res) => {
+          data = res.data[this.id];
+          data.Presupuesto = this.Detalles;
+          this.updateIngresos(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.getIngresos();
+          this.resetData();
+        });
+    },
+    cambiarClass(index){
+      return  this.Detalles[index].Estatus ? "text-success cursor" : "text-danger cursor";
     },
     resetData() {
       this.index = -1;
