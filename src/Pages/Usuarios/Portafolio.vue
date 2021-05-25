@@ -89,8 +89,17 @@
                     type="button"
                     class="btn btn-ligth btn-block"
                     v-on:click="savePlataforma"
+                    v-if="!isUpdate"
                   >
                     <i class="far fa-save text-primary"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ligth btn-block"
+                    v-on:click="actualizarPlataforma"
+                    v-if="isUpdate"
+                  >
+                    <i class="fas fa-exchange-alt text-info"></i>
                   </button>
                 </div>
               </div>
@@ -108,8 +117,11 @@
                   :key="i"
                   class="list-group-item d-flex justify-content-between"
                 >
-                  <span class="text.success">
-                    <i class="far fa-dot-circle"></i>
+                  <span class="text-danger cursor">
+                    <i
+                      class="fas fa-trash-alt"
+                      v-on:click="eliminarPlataforma(i)"
+                    ></i>
                   </span>
                   <h6>
                     Plataforma
@@ -123,7 +135,10 @@
                       detalle.Cantidad
                     }}</span>
                   </h6>
-                  <i class="fas fa-check-circle text-primary cursor"></i>
+                  <i
+                    class="fas fa-check-circle text-primary cursor"
+                    v-on:click="seleccionarPlataforma(i)"
+                  ></i>
                 </li>
               </ul>
             </div>
@@ -143,6 +158,8 @@ export default {
   data() {
     return {
       id: "",
+      isUpdate: false,
+      index: 0,
       Usuario: null,
       Plataforma: {
         Nombre: "",
@@ -153,20 +170,21 @@ export default {
         }).format(new Date()),
         Cantidad: 0.0,
       },
-      Plataformas:[]
+      Plataformas: [],
     };
   },
   methods: {
-    resetData(){
+    resetData() {
       this.Plataforma.Nombre = "";
       this.Plataforma.Cantidad = 0.0;
+      this.isUpdate = false;
+      this.index = 0;
     },
     getPlataformas() {
       Axios.get("https://inversof-c4bcf.firebaseio.com/Usuarios.json")
         .then((res) => {
           this.Usuario = res.data[this.id];
           this.Plataformas = JSON.parse(this.Usuario.Portafolio);
-          console.log(this.Usuario);
         })
         .catch((error) => {
           console.error(error);
@@ -175,7 +193,23 @@ export default {
     savePlataforma() {
       this.Plataformas.push(this.Plataforma);
       this.Usuario.Portafolio = JSON.stringify(this.Plataformas);
-      console.log(this.Usuario.Portafolio);
+      this.actualizarDatos(this.Usuario);
+    },
+    seleccionarPlataforma(index) {
+      this.Plataforma = this.Plataformas[index];
+      this.isUpdate = true;
+      this.index = index;
+      this.$swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Se Cargo Plataforma",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    eliminarPlataforma(index) {
+      this.Plataformas.splice(index, 1);
+      this.Usuario.Portafolio = JSON.stringify(this.Plataformas);
       this.actualizarDatos(this.Usuario);
     },
     actualizarDatos(Usuario) {
@@ -197,7 +231,7 @@ export default {
           this.$swal.fire({
             position: "center",
             icon: "success",
-            title: "Se Actualizo Presupuesto",
+            title: "Se Ejecuto la Tarea con Exito!",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -211,6 +245,11 @@ export default {
           this.resetData();
         });
     },
+    actualizarPlataforma() {
+      this.Plataformas[this.index] = this.Plataforma;
+      this.Usuario.Portafolio = JSON.stringify(this.Plataformas);
+      this.actualizarDatos(this.Usuario);
+    },
   },
   mounted() {
     this.id = this.$route.params.id;
@@ -218,3 +257,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.cursor {
+  cursor: pointer;
+}
+</style>
