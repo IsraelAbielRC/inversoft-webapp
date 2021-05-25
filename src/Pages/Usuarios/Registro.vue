@@ -131,7 +131,7 @@ export default {
           month: "2-digit",
           year: "numeric",
         }).format(new Date()),
-        Portafolio: "",
+        Portafolio: "[]",
         Presupuesto: "",
       };
       /*Metodo Post */
